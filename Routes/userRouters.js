@@ -1,10 +1,8 @@
 const express = require("express");
-const usersBLL = require("../../BLL/userLoginBLL/userBLL");
-const {
-  findUserByUsernameAndPassword,
-} = require("../../BLL/userLoginBLL/userBLL");
+const usersBLL = require("../BLL/userBLL");
+const { findUserByUsernameAndPassword } = require("../BLL/userBLL");
 const bcrypt = require("bcryptjs");
-const User = require("../../Models/userModel"); // Adjust the path to your User model
+const User = require("../Models/userModel");
 
 const router = express.Router();
 

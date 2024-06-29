@@ -9,6 +9,7 @@ const categoryRouter = require("./Routes/categoryRouter");
 const cartRouter = require("./Routes/cartRouter");
 const statisticsRouter = require("./Routes/StatisticsRouter");
 const recommendationRouter = require("./Routes/recommendationRouter");
+const userRouter = require("./Routes/userRouters");
 
 const app = express();
 const port = 8000;
@@ -19,6 +20,7 @@ app.use(cors());
 app.use(express.json());
 
 // routers
+app.use("/users", userRouter);
 app.use("/products", productsRouter);
 app.use("/categories", categoryRouter);
 app.use("/cart", cartRouter);

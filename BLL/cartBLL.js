@@ -1,12 +1,21 @@
 const Cart = require("../Models/cartModel");
 const Product = require("../Models/productsModel");
+const mongoose = require("mongoose");
 
 const fetchCart = async (userId) => {
   try {
     console.log("fetchCart - userId:", userId);
 
-    const cart = await Cart.findOne({ user: userId, active: true });
+    const cart = await Cart.findOne({
+      user: new mongoose.Types.ObjectId(userId),
+      active: true,
+    }).populate("items.product");
     console.log("fetchCart - cart:", cart);
+
+    if (!cart) {
+      console.log("Cart not found for user:", userId);
+      return null;
+    }
 
     return cart;
   } catch (error) {
@@ -40,9 +49,12 @@ const addItem = async (userId, itemDetails) => {
     console.log("addItem - updated product stock:", product.stock);
 
     // Fetch or create the cart
-    let cart = await fetchCart(userId);
+    let cart = await Cart.findOne({
+      user: new mongoose.Types.ObjectId(userId),
+      active: true,
+    });
     if (!cart) {
-      cart = new Cart({ user: userId });
+      cart = new Cart({ user: new mongoose.Types.ObjectId(userId) });
     }
 
     console.log("addItem - cart before adding item:", cart);
@@ -62,7 +74,7 @@ const addItem = async (userId, itemDetails) => {
     } else {
       // Otherwise, add the new item to the cart with status "Pending"
       newItem = {
-        product: itemDetails.productId,
+        product: new mongoose.Types.ObjectId(itemDetails.productId),
         quantity: itemDetails.quantity,
         price: itemDetails.price,
         color: itemDetails.color,

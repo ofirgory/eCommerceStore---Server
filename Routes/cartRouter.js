@@ -1,5 +1,6 @@
 const express = require("express");
 const cartRouter = express.Router();
+const Cart = require("../Models/cartModel");
 const {
   fetchCart,
   addItem,
@@ -14,9 +15,11 @@ cartRouter.get("/:userId", async (req, res) => {
     const userId = req.params.userId;
     console.log("Fetch cart - userId:", userId);
 
-    const cart = await fetchCart(userId);
-    console.log("Fetch cart - cart:", cart);
-
+    let cart = await Cart.findOne({ user: userId }).populate("items.product");
+    if (!cart) {
+      cart = new Cart({ user: userId, items: [] });
+      await cart.save();
+    }
     res.json(cart);
   } catch (error) {
     console.error("Fetch cart - error:", error);
@@ -76,10 +79,8 @@ cartRouter.delete("/:userId/item/:itemId", async (req, res) => {
     console.log(
       `Attempting to delete item with ID: ${itemId} from user: ${userId}`
     );
-
     const cart = await deleteItem(userId, itemId);
     console.log(`Item with ID: ${itemId} deleted successfully`);
-
     res.json(cart);
   } catch (error) {
     console.error(`Error in deleting item: ${error.message}`);

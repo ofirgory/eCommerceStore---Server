@@ -11,6 +11,7 @@ const statisticsRouter = require("./Routes/StatisticsRouter");
 const recommendationRouter = require("./Routes/recommendationRouter");
 const userRouter = require("./Routes/userRouters");
 const customersRouter = require("./Routes/customersRouter");
+const dealsRouter = require("./Routes/dealsRouter");
 
 const app = express();
 const port = 8000;
@@ -28,6 +29,7 @@ app.use("/cart", cartRouter);
 app.use("/statistics", statisticsRouter);
 app.use("/recommendations", recommendationRouter);
 app.use("/customers", customersRouter);
+app.use("/deals", dealsRouter);
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });

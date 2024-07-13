@@ -10,7 +10,7 @@ const getAllUsers = async () => {
   }
 };
 
-const findUserByUsernameAndPassword = async (userName, password) => {
+const login = async (userName, password) => {
   try {
     const user = await User.findOne({ userName });
     if (!user) {
@@ -32,7 +32,7 @@ const findUserByUsernameAndPassword = async (userName, password) => {
   }
 };
 
-const registerUser = async (userName, email, password) => {
+const registerUser = async (userName, email, password, role = "user") => {
   try {
     // Check if user exists
     let user = await User.findOne({ email });
@@ -40,7 +40,7 @@ const registerUser = async (userName, email, password) => {
       throw new Error("User already exists");
     }
 
-    user = new User({ userName, email, password });
+    user = new User({ userName, email, password, role });
 
     // Hash password
     const salt = await bcrypt.genSalt(10);
@@ -56,6 +56,6 @@ const registerUser = async (userName, email, password) => {
 
 module.exports = {
   getAllUsers,
-  findUserByUsernameAndPassword,
+  login,
   registerUser,
 };

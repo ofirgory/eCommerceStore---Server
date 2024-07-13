@@ -53,18 +53,27 @@ const addItem = async (userId, itemDetails) => {
       user: new mongoose.Types.ObjectId(userId),
       active: true,
     });
+
     if (!cart) {
       cart = new Cart({ user: new mongoose.Types.ObjectId(userId) });
     }
 
-    console.log("addItem - cart before adding item:", cart);
+    console.log(
+      "addItem - cart before adding item:",
+      JSON.stringify(cart, null, 2)
+    );
 
-    const existingItemIndex = cart.items.findIndex(
-      (item) =>
-        item.product.toString() === itemDetails.productId &&
+    const existingItemIndex = cart.items.findIndex((item) => {
+      if (!item.product) {
+        console.error("Item product is undefined", item);
+        return false;
+      }
+      return (
+        item.product.toString() === itemDetails.productId.toString() &&
         item.size === itemDetails.size &&
         item.color === itemDetails.color
-    );
+      );
+    });
 
     let newItem;
     if (existingItemIndex !== -1) {
@@ -84,14 +93,41 @@ const addItem = async (userId, itemDetails) => {
       cart.items.push(newItem);
     }
 
-    console.log("addItem - cart after adding item:", cart);
+    console.log(
+      "addItem - cart after adding item:",
+      JSON.stringify(cart, null, 2)
+    );
 
     cart.modifiedAt = Date.now();
     await cart.save();
 
-    console.log("addItem - saved cart:", cart);
+    console.log("addItem - saved cart:", JSON.stringify(cart, null, 2));
 
-    return newItem; // Return the newly added item
+    // Populate the new item with product details
+    const addedItem = {
+      ...newItem,
+      product: {
+        _id: product._id,
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        category: product.category,
+        color: product.color,
+        stock: product.stock,
+        images: product.images,
+        tags: product.tags,
+        created_at: product.created_at,
+        updated_at: product.updated_at,
+        size: product.size,
+        dealPrice: product.dealPrice,
+      },
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+
+    console.log("addItem - addedItem:", JSON.stringify(addedItem, null, 2));
+
+    return addedItem; // Return the newly added item with populated product details
   } catch (error) {
     console.error("addItem - error:", error);
     throw error;

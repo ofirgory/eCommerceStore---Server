@@ -1,7 +1,8 @@
+// src/BLL/productsBLL.js
+
 const Product = require("../Models/productsModel");
 const Category = require("../Models/categoryModel");
 
-// Function to update only the category of a product
 // Function to update only the category of a product
 const updateProductCategory = async (productId, newCategoryId) => {
   try {
@@ -24,7 +25,7 @@ const updateProductCategory = async (productId, newCategoryId) => {
   }
 };
 
-// Upload a new product
+// Function to upload a new product
 const uploadProduct = async (productData) => {
   try {
     const product = new Product(productData);
@@ -35,7 +36,17 @@ const uploadProduct = async (productData) => {
   }
 };
 
-// Update an existing product
+// Function to upload multiple new products
+const uploadMultipleProducts = async (productsData) => {
+  try {
+    const products = await Product.insertMany(productsData);
+    return products;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Function to update an existing product
 const updateProduct = async (productId, updateData) => {
   try {
     const product = await Product.findByIdAndUpdate(productId, updateData, {
@@ -50,7 +61,7 @@ const updateProduct = async (productId, updateData) => {
   }
 };
 
-// Fetch all products
+// Function to fetch all products
 const fetchAllProducts = async () => {
   try {
     const products = await Product.find({});
@@ -60,7 +71,7 @@ const fetchAllProducts = async () => {
   }
 };
 
-// Fetch a product by ID
+// Function to fetch a product by ID
 const fetchProductById = async (productId) => {
   try {
     const product = await Product.findById(productId);
@@ -73,7 +84,7 @@ const fetchProductById = async (productId) => {
   }
 };
 
-// Delete a product
+// Function to delete a product
 const deleteProduct = async (productId) => {
   try {
     const result = await Product.findByIdAndDelete(productId);
@@ -89,6 +100,7 @@ const deleteProduct = async (productId) => {
 module.exports = {
   updateProductCategory,
   uploadProduct,
+  uploadMultipleProducts, // Add this line
   updateProduct,
   fetchAllProducts,
   fetchProductById,

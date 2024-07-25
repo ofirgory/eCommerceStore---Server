@@ -1,3 +1,5 @@
+// src/routes/productsRouter.js
+
 const express = require("express");
 const productsRouter = express.Router();
 const productsBLL = require("../BLL/productsBLL");
@@ -29,6 +31,18 @@ productsRouter.post("/", async (req, res) => {
     res
       .status(500)
       .json({ message: "Failed to create product", error: error.message });
+  }
+});
+
+// POST route to upload multiple new products
+productsRouter.post("/bulk", async (req, res) => {
+  try {
+    const products = await productsBLL.uploadMultipleProducts(req.body);
+    res.status(201).json(products);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to create products", error: error.message });
   }
 });
 

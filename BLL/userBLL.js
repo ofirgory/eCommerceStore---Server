@@ -1,4 +1,5 @@
 const User = require("../Models/userModel");
+const Cart = require("../Models/cartModel");
 const bcrypt = require("bcryptjs");
 
 const getAllUsers = async () => {
@@ -22,6 +23,17 @@ const login = async (userName, password) => {
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
+      // Check if the user has a cart
+      let cart = await Cart.findOne({ user: user._id });
+      if (!cart) {
+        // If no cart exists, create a new one
+        cart = new Cart({ user: user._id });
+        await cart.save();
+        console.log("New cart created for user:", user._id);
+      } else {
+        console.log("Existing cart found for user:", user._id);
+      }
+
       return user;
     } else {
       console.log("Password does not match");

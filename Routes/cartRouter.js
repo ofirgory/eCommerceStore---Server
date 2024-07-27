@@ -1,6 +1,5 @@
 const express = require("express");
 const cartRouter = express.Router();
-const Cart = require("../Models/cartModel");
 const {
   fetchCart,
   addItem,
@@ -15,7 +14,7 @@ cartRouter.get("/:userId", async (req, res) => {
     const userId = req.params.userId;
     console.log("Fetch cart - userId:", userId);
 
-    let cart = await Cart.findOne({ user: userId }).populate("items.product");
+    let cart = await fetchCart(userId);
     if (!cart) {
       cart = new Cart({ user: userId, items: [] });
       await cart.save();

@@ -13,6 +13,7 @@ const cartItemSchema = new Schema(
     color: { type: String, required: true }, // Assuming color can vary in the cart
     price: { type: Number, required: true }, // Storing price at the time of adding to cart to handle price changes later
     status: { type: String, enum: ["Pending", "Bought"], default: "Pending" }, // Adding status field
+    addedAt: { type: Date, default: Date.now }, // Adding addedAt field to track when the item was added
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "updated_at" }, // Optional: manage timestamps

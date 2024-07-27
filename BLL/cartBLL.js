@@ -81,7 +81,7 @@ const addItem = async (userId, itemDetails) => {
       cart.items[existingItemIndex].quantity += itemDetails.quantity;
       newItem = cart.items[existingItemIndex];
     } else {
-      // Otherwise, add the new item to the cart with status "Pending"
+      // Otherwise, add the new item to the cart with status "Pending" and current date as addedAt
       newItem = {
         product: new mongoose.Types.ObjectId(itemDetails.productId),
         quantity: itemDetails.quantity,
@@ -89,6 +89,7 @@ const addItem = async (userId, itemDetails) => {
         color: itemDetails.color,
         size: itemDetails.size,
         status: "Pending",
+        addedAt: new Date(),
       };
       cart.items.push(newItem);
     }

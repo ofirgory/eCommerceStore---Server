@@ -3,7 +3,7 @@ const cors = require("cors");
 const http = require("http");
 const WebSocket = require("ws");
 
-const db = require("./config/db");
+const db = require("./db");
 const productsRouter = require("./Routes/productsRouter");
 const categoryRouter = require("./Routes/categoryRouter");
 const cartRouter = require("./Routes/cartRouter");

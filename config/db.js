@@ -1,10 +1,12 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const connectDB = () => {
   mongoose
-    .connect(
-      "mongodb+srv://ofircoco:TPwWxgPlB0wCnTex@cluster0.gdwp0ea.mongodb.net/"
-    )
+    .connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
     .then(() => console.log("Connected to eCommerceDB"))
     .catch((error) => console.log(error));
 };

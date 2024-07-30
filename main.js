@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const http = require("http");
 const WebSocket = require("ws");
+require("dotenv").config();
 
 const db = require("./db");
 const productsRouter = require("./Routes/productsRouter");
@@ -14,11 +15,16 @@ const customersRouter = require("./Routes/customersRouter");
 const dealsRouter = require("./Routes/dealsRouter");
 
 const app = express();
-const port = 8000;
+const port = process.env.PORT || 8000;
 
 db.connectDB();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "ecommerce-store-front-end-client-pp3k-a0f6lzaol.vercel.app",
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // routers

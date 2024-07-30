@@ -21,7 +21,7 @@ db.connectDB();
 
 app.use(
   cors({
-    origin: "ecommerce-store-front-end-client-pp3k-a0f6lzaol.vercel.app",
+    origin: "ecommerce-store-front-end-client-rgfl-qkbqllb1x.vercel.app",
     credentials: true,
   })
 );
